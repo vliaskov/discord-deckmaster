@@ -29,6 +29,29 @@ function findFiles(startPath, filter){
 	return matches;
 }
 
+function drawCard(msg, hidden){
+
+	if(decksize == 0){
+		console.log("Deck is empty.");
+	}
+	else {
+		var cardid=0;
+		cardid = randomInt(decksize-1);
+
+		console.log('draws card! ', cardid, " ", deck[cardid]);
+
+		if (hidden == 1) {
+			msg.author.send("You draw a card:", {files: [deck[cardid]]});
+		} else {
+			msg.channel.send("You draw a card:", {files: [deck[cardid]]});
+		}
+		for(var i=cardid; i<decksize-1; i++) {
+			deck[i]=deck[i+1];
+		}
+		decksize--;
+	}
+}
+
 bot.on('ready', () =>{
 	console.log('This bot is online!');
 });
@@ -46,21 +69,10 @@ bot.on('message', msg=>{
 		console.log("Found: ",matches, " files");
 	}
 	if (msg.content === "draw"){
-		if(decksize == 0){
-			console.log("Deck is empty.");
-		}
-		else {
-		var cardid=0;
-		cardid = randomInt(decksize-1);
-		
-		msg.author.send("You draw a card:", {files: [deck[cardid]]});
-		msg.channel.send('draws a card! ', cardid);
-		console.log('draws card! ', cardid, " ", deck[cardid]);
-		for(var i=cardid; i<decksize-1; i++) {
-			deck[i]=deck[i+1];
-		}
-		decksize--;
+		drawCard(msg, 1);
 	}
+	if (msg.content === "flip"){
+		drawCard(msg, 0);
 	}
 })
 
