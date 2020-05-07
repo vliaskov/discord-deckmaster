@@ -3,7 +3,8 @@ const path = require('path');
 const fs = require('fs');
 const randomInt = require('random-int');
 const bot = new Discord.Client();
-const imgfolder = "/home/vliaskovitis/Documents/rpg/BPG001_Shab-al-Hiri-Roach/";
+//const imgfolder = "/home/vliaskovitis/Documents/rpg/BPG001_Shab-al-Hiri-Roach/";
+const imgfolder = "/home/vliaskovitis/Documents/rpg/CthulhuConfidential-Test/";
 var drawn = []
 var deck = []
 var matches;
@@ -42,29 +43,24 @@ bot.on('message', msg=>{
 	if (msg.content === "createdecks"){
 
 		decksize = findFiles(imgfolder, '.png');
-		cardsleft = decksize;
 		console.log("Found: ",matches, " files");
 	}
 	if (msg.content === "draw"){
-		var found=0
-		if(cardsleft == 0){
+		if(decksize == 0){
 			console.log("Deck is empty.");
 		}
 		else {
-		var found=0;
 		var cardid=0;
-		while(found == 0){
-			cardid = randomInt(decksize-1);
-			if (drawn[cardid] == 0) {
-				found = 1;
-				drawn[cardid] = 1;
-				cardsleft--;
-			}
-		}
+		cardid = randomInt(decksize-1);
 		
 		msg.author.send("You draw a card:", {files: [deck[cardid]]});
 		msg.channel.send('draws a card! ', cardid);
+		console.log('draws card! ', cardid, " ", deck[cardid]);
+		for(var i=cardid; i<decksize-1; i++) {
+			deck[i]=deck[i+1];
 		}
+		decksize--;
+	}
 	}
 })
 
