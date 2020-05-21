@@ -8,6 +8,7 @@ const imgfolder = "/home/vliaskovitis/Documents/rpg/CthulhuConfidential-Test/";
 var drawn = []
 var deck = []
 var matches;
+var gm = require('gm');
 const token = '';
 
 function findFiles(startPath, filter){
@@ -52,6 +53,36 @@ function drawCard(msg, hidden){
 	}
 }
 
+function drawRotateCard(msg, hidden){
+
+	if(decksize == 0){
+		console.log("Deck is empty.");
+	}
+	else {
+		var cardid=0;
+		cardid = randomInt(decksize-1);
+		var rotated = "tmp.png";
+		//var writeStream = fs.createWriteStream("tmp.png");
+		console.log('draws card! ', cardid, " ", deck[cardid]);
+		gm(deck[cardid]).rotate('black', 180).write("tmp.png", //writeStream,
+			function(error){
+    				if (!error) {
+				        console.log("Finished saving JPG");
+				    }
+			});
+		if (hidden == 1) {
+			msg.author.send("You draw a card:", {files: [deck[cardid]]});
+			msg.author.send("You draw a card:", {files: ["tmp.png"]});
+		} else {
+			msg.channel.send("You draw a card:", {files: [deck[cardid]]});
+		}
+		for(var i=cardid; i<decksize-1; i++) {
+			deck[i]=deck[i+1];
+		}
+		decksize--;
+	}
+}
+
 bot.on('ready', () =>{
 	console.log('This bot is online!');
 });
@@ -73,6 +104,9 @@ bot.on('message', msg=>{
 	}
 	if (msg.content === "flip"){
 		drawCard(msg, 0);
+	}
+	if (msg.content === "drawrotate"){
+		drawRotateCard(msg, 1);
 	}
 })
 
