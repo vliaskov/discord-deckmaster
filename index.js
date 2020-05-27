@@ -3,12 +3,12 @@ const path = require('path');
 const fs = require('fs');
 const randomInt = require('random-int');
 const bot = new Discord.Client();
-//const imgfolder = "/home/vliaskovitis/Documents/rpg/BPG001_Shab-al-Hiri-Roach/";
-const imgfolder = "/home/vliaskovitis/Documents/rpg/CthulhuConfidential-Test/";
+const imgfolder = "/home/vliaskovitis/Documents/rpg/BPG001_Shab-al-Hiri-Roach/";
+//const imgfolder = "/home/vliaskovitis/Documents/rpg/CthulhuConfidential-Test/";
 var drawn = []
 var deck = []
 var matches;
-var gm = require('gm');
+var Jimp = require('jimp'); 
 const token = '';
 
 function findFiles(startPath, filter){
@@ -30,7 +30,7 @@ function findFiles(startPath, filter){
 	return matches;
 }
 
-function drawCard(msg, hidden){
+function drawCard(msg, hidden, rotate){
 
 	if(decksize == 0){
 		console.log("Deck is empty.");
@@ -38,43 +38,34 @@ function drawCard(msg, hidden){
 	else {
 		var cardid=0;
 		cardid = randomInt(decksize-1);
+		var card = deck[cardid];
+		console.log('draws card! ', cardid, " ", card);
 
-		console.log('draws card! ', cardid, " ", deck[cardid]);
+		if (rotate) {
+		var rotated = "/mnt/devel/discord-deckmaster/tmp.png";
+		console.log('draws card! ', cardid, " ", card);
+  
+		Jimp.read(card, (err, rotatedimage) => {
+  			if (err) throw err;
+			rotatedimage
+		    	    .rotate(180)
+			    .write(rotated, () => {
+				console.log('written rotated card!');
+				rotatedimage_written = 1;
+				msg.author.send("You draw a card:", {files: [rotated]});
+				}
+				); // save
+		});
+
+                }
 
 		if (hidden == 1) {
-			msg.author.send("You draw a card:", {files: [deck[cardid]]});
+			msg.author.send("You draw a card:", {files: [card]});
 		} else {
-			msg.channel.send("You draw a card:", {files: [deck[cardid]]});
-		}
-		for(var i=cardid; i<decksize-1; i++) {
-			deck[i]=deck[i+1];
-		}
-		decksize--;
-	}
-}
-
-function drawRotateCard(msg, hidden){
-
-	if(decksize == 0){
-		console.log("Deck is empty.");
-	}
-	else {
-		var cardid=0;
-		cardid = randomInt(decksize-1);
-		var rotated = "tmp.png";
-		//var writeStream = fs.createWriteStream("tmp.png");
-		console.log('draws card! ', cardid, " ", deck[cardid]);
-		gm(deck[cardid]).rotate('black', 180).write("tmp.png", //writeStream,
-			function(error){
-    				if (!error) {
-				        console.log("Finished saving JPG");
-				    }
-			});
-		if (hidden == 1) {
-			msg.author.send("You draw a card:", {files: [deck[cardid]]});
-			msg.author.send("You draw a card:", {files: ["tmp.png"]});
-		} else {
-			msg.channel.send("You draw a card:", {files: [deck[cardid]]});
+			msg.channel.send("You draw a card:", {files: [card]});
+			if (rotate == 1) {
+				msg.channel.send("You draw a card:", {files: [rotated]});
+			}
 		}
 		for(var i=cardid; i<decksize-1; i++) {
 			deck[i]=deck[i+1];
@@ -100,13 +91,13 @@ bot.on('message', msg=>{
 		console.log("Found: ",matches, " files");
 	}
 	if (msg.content === "draw"){
-		drawCard(msg, 1);
+		drawCard(msg, 1, 0);
 	}
 	if (msg.content === "flip"){
-		drawCard(msg, 0);
+		drawCard(msg, 0, 0);
 	}
 	if (msg.content === "drawrotate"){
-		drawRotateCard(msg, 1);
+		drawCard(msg, 1, 1);
 	}
 })
 
