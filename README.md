@@ -1,6 +1,6 @@
 # Discord Deckmaster Bot
 
-Deckmaster is a [Discord](http://wayland.freedesktop.org/) bot for creating
+Deckmaster is a [Discord](https://discord.com/) bot for creating
 card decks and drawing cards for online play of tabletop games.
 
 ## Running and preparing a deck
