@@ -52,7 +52,12 @@ function drawCard(msg, hidden, rotate){
 			    .write(rotated, () => {
 				console.log('written rotated card!');
 				rotatedimage_written = 1;
-				msg.author.send("You draw a card:", {files: [rotated]});
+				if (hidden == 1) {
+					msg.author.send("Same card rotated:", {files: [rotated]});
+				}
+				else {
+					msg.channel.send("Same card rotated:", {files: [rotated]});
+				}
 				}
 				); // save
 		});
@@ -63,9 +68,6 @@ function drawCard(msg, hidden, rotate){
 			msg.author.send("You draw a card:", {files: [card]});
 		} else {
 			msg.channel.send("You draw a card:", {files: [card]});
-			if (rotate == 1) {
-				msg.channel.send("You draw a card:", {files: [rotated]});
-			}
 		}
 		for(var i=cardid; i<decksize-1; i++) {
 			deck[i]=deck[i+1];
@@ -79,12 +81,6 @@ bot.on('ready', () =>{
 });
 
 bot.on('message', msg=>{
-	if (msg.content === "HELLO"){
-		msg.reply('HELLO FRIEND!');
-		msg.channel.send("My Bot's message", {files: ["/home/vliaskovitis/Pictures/puppet.jpg"]});
-		msg.author.send("My Bot's message", {files: ["/home/vliaskovitis/Pictures/puppet.jpg"]});
-		msg.author.send("But really.. keep it quiet. Friend.")
-	}
 	if (msg.content === "createdecks"){
 
 		decksize = findFiles(imgfolder, '.png');
