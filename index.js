@@ -2,9 +2,13 @@ const Discord= require('discord.js');
 const path = require('path');
 const fs = require('fs');
 const randomInt = require('random-int');
+require("dotenv").config()
+
 const bot = new Discord.Client();
 const imgfolder = "/home/vliaskovitis/Documents/rpg/BPG001_Shab-al-Hiri-Roach/";
 //const imgfolder = "/home/vliaskovitis/Documents/rpg/CthulhuConfidential-Test/";
+
+
 var drawn = []
 var deck = []
 var matches;
@@ -97,7 +101,7 @@ bot.on('message', msg=>{
 	}
 })
 
-bot.login(token);
+bot.login(process.env.BOT_TOKEN);
 
 
 
