@@ -15,6 +15,7 @@
   "dependencies": {
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
+    "glob": "^7.1.6",
     "gm": "^1.23.1",
     "graphicsmagick": "0.0.1",
     "image-rotate": "^1.0.0",
