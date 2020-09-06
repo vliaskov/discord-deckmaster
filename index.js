@@ -163,7 +163,7 @@ function drawMatchingRegexCard(msg, imgfolder, deckname, match){
 		console.log("Deck is empty.");
 	}
 	else {
-                for (var i=0; i< decksize - 1; i++) {
+                for (var i=0; i<= decksize - 1; i++) {
 
                         if(deck[i].includes(match)) {
 
@@ -252,41 +252,41 @@ bot.on('ready', () =>{
 
 bot.on('message', msg=>{
 	if (msg.content.includes("createdeck")){
-                words = msg.content.split(" ");
+                words = msg.content.split(/\s+/);
 		findFiles(words[2], '.png', words[1], words[3]);
 		console.log("Found: ",matches, " files");
 	}
 	if (msg.content.includes("drawrotate")){
-                words = msg.content.split(" ");
+                words = msg.content.split(/\s+/);
 		drawCard(msg, 1, 1, words[1]);
 	}
 	else if (msg.content.includes("drawspecific")){
-                words = msg.content.split(" ");
+                words = msg.content.split(/\s+/);
 		drawSpecificCard(msg, words[1], words[2], words[3]);
 	}
 	else if (msg.content.includes("drawcard")){
-                words = msg.content.split(" ");
+                words = msg.content.split(/\s+/);
 		drawCard(msg, 1, 0, words[1]);
 	}
 	else if (msg.content.includes("drawtime")){
-                words = msg.content.split(" ");
+                words = msg.content.split(/\s+/);
 		//drawSpecificCard(msg, "/home/vliaskovitis/Documents/rpg/ALICE/time", "time", words[1]);
 		drawMatchingRegexCard(msg, "/home/vliaskovitis/Documents/rpg/ALICE/time", "time", words[1]);
 	}
 	if (msg.content.includes("flip")){
-                words = msg.content.split(" ");
+                words = msg.content.split(/\s+/);
 		drawCard(msg, 0, 0, words[1]);
 	}
 	if (msg.content.includes("addfinalsuspect")){
-                words = msg.content.split(" ");
+                words = msg.content.split(/\s+/);
 		addCardToDeck("/home/vliaskovitis/Documents/rpg/ALICE/suspects/", "finalsuspects", words[1]);
 	}
 	if (msg.content.includes("addfinallocation")){
-                words = msg.content.split(" ");
+                words = msg.content.split(/\s+/);
 		addCardToDeck("/home/vliaskovitis/Documents/rpg/ALICE/locations/", "finallocations", words[1]);
 	}
 	if (msg.content.includes("addtimefromset")){
-                words = msg.content.split(" ");
+                words = msg.content.split(/\s+/);
 		addRandomFromSet("/home/vliaskovitis/Documents/rpg/ALICE/time/", "time", words[1]);
 	}
 
